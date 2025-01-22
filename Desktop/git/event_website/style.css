@@ -1,0 +1,112 @@
+/* 基本設計 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fff5e1;
+  color: #333;
+}
+
+/* 頂部模塊 */
+header {
+  background: linear-gradient(90deg, #d35400, #e74c3c);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+#checkInSection {
+  display: block; /* 確保報到區塊顯示 */
+}
+#mainContent {
+  display: none; /* 初始隱藏主功能區 */
+}
+/* 報到區域樣式 */
+#checkInSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 水平置中 */
+  justify-content: center; /* 垂直置中 */
+  height: 100vh; /* 占滿可視高度，垂直居中 */
+  text-align: center; /* 文字置中 */
+  background-color: #fff5e1; /* 可選背景色 */
+}
+
+/* 報到按鈕樣式 */
+#checkInSection button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #d35400;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#checkInSection button:hover {
+  background-color: #e67e22;
+}
+
+/* 報到訊息樣式 */
+#checkInMessage {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #333;
+}
+
+#lotteryInfo p {
+  margin: 5px 0;
+}
+
+/* 模塊佈局 */
+.two-column {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  background: #d35400;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #e67e22;
+}
+
+/* 留言板 */
+#messageBoard {
+  padding: 20px;
+  background: #faf2e0;
+  margin: 20px;
+  border-radius: 8px;
+}
+.multi-column {
+  column-count: 4; /* 分為 4 欄 */
+  column-gap: 20px; /* 欄之間的間距 */
+  list-style-type: none; /* 移除預設的列表樣式 */
+  padding: 0;
+}
+
+.multi-column li {
+  break-inside: avoid; /* 防止項目跨欄 */
+  padding: 5px 0; /* 增加上下間距 */
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USPACE轉運站</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 報到模塊 -->
+  <section id="checkInSection">
+    <h2>報到處</h2>
+    <input type="text" id="name" placeholder="請輸入姓名">
+    <button onclick="checkIn()">報到</button>
+    <p id="checkInMessage"></p>
+  </section>
+
+  <!-- 主功能區塊 -->
+  <div id="mainContent" style="display: none;">
+    <!-- 功能區內容 -->
+    <header id="header">
+      <h1>USPACE轉運站</h1>
+      <div id="lotteryInfo">
+        <p id="lotteryNumber">抽獎編號：未分配</p>
+        <p id="groupInfo">組別：未分配</p>
+        <p id="groupMemberList">組員：未分配</p>
+      </div>
+    </header>
+
+    <!-- 活動行程與注意事項 -->
+    <section id="scheduleAndNotice" class="two-column">
+      <div class="column">
+        <h2>活動行程</h2>
+        <ul>
+          <li>17:00 - 報到</li>
+          <li>18:00 - 晚餐開始</li>
+          <li>19:00 - 節目表演</li>
+          <li>20:30 - 抽獎時間</li>
+        </ul>
+      </div>
+      <div class="column">
+        <h2>注意事項</h2>
+        <p>請遵守現場規則，注意安全，愉快參與活動！</p>
+      </div>
+    </section>
+
+    <!-- 互動區 -->
+    <section id="features" class="two-column">
+      <div class="column">
+        <h2>投票</h2>
+        <a href="vote.html" target="_blank"><button>進入投票</button></a>
+      </div>
+      <div class="column">
+        <h2>小遊戲</h2>
+        <a href="game.html" target="_blank"><button>進入小遊戲</button></a>
+      </div>
+    </section>
+
+    <!-- 留言板 -->
+    <section id="messageBoard">
+      <h2>留言板</h2>
+      <textarea id="messageInput" placeholder="在此輸入留言..."></textarea>
+      <button onclick="submitMessage()">提交留言</button>
+      <div id="messages"></div>
+    </section>
+
+    <!-- 報到狀態 -->
+    <section id="reportStatus" class="two-column">
+      <div class="column">
+        <h2>報到狀態</h2>
+        <div>
+          <h3>已報到人員</h3>
+          <ul id="checkedInList" class="multi-column"></ul>
+        </div>
+        <div>
+          <h3>尚未報到人員</h3>
+          <ul id="uncheckedList" class="multi-column"></ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="participants.js"></script>
+</body>
+</html>
