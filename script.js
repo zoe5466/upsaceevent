@@ -99,10 +99,14 @@ function checkIn() {
     return;
   }
 
-  // 檢查是否已報到
-  if (checkedIn.includes(nameInput)) {
-    checkInMessage.innerText = "您已經報到過了！";
-    checkInMessage.style.color = "red";
+  // 檢查是否已報到過
+  const existingUser = checkedIn.find(user => user.name === nameInput);
+  if (existingUser) {
+    // 如果已經報到過，顯示組別和編號，直接跳到主頁
+    checkInMessage.innerText = `您已經報到！組別：${existingUser.group}, 抽獎編號：${existingUser.lotteryNumber}`;
+    checkInMessage.style.color = "green";
+    updateHeader(existingUser.lotteryNumber, existingUser.group, existingUser.members);
+    showMainContent(existingUser.group, existingUser.members);
     return;
   }
 
@@ -110,9 +114,9 @@ function checkIn() {
   assignGroup(nameInput);
 }
 
+// 分配組別並儲存資料
 function assignGroup(nameInput) {
   const checkInMessage = document.getElementById("checkInMessage");
-
   let randomGroup;
 
   // 隨機分組直到找到未滿 13 人的組別
@@ -123,12 +127,16 @@ function assignGroup(nameInput) {
   randomGroup.count++;
   randomGroup.members.push(nameInput);
 
-  checkedIn.push(nameInput);
-  currentUser = { 
+  // 記錄使用者的組別和編號
+  const lotteryNumber = reportCounter++;
+  const currentUser = { 
     name: nameInput, 
     group: randomGroup.name, 
-    lotteryNumber: reportCounter++ 
-  }; // 紀錄訪客身份
+    lotteryNumber: lotteryNumber, 
+    members: randomGroup.members
+  };
+
+  checkedIn.push(currentUser);  // 儲存報到人員資料
 
   // 更新 Firebase 資料
   const dbRef = doc(db, "event-data", "data");
@@ -146,7 +154,7 @@ function assignGroup(nameInput) {
   checkInMessage.style.color = "green";
 
   // 更新主介面
-  updateHeader(currentUser.lotteryNumber, randomGroup.name, randomGroup.members);
+  updateHeader(lotteryNumber, randomGroup.name, randomGroup.members);
   showMainContent(randomGroup.name, randomGroup.members);
 
   // 更新已報到和未報到名單
