@@ -46,7 +46,8 @@ let reportCounter = 1;
 
 // 初始化頁面
 document.addEventListener("DOMContentLoaded", () => {
-  setupAuthListener();
+  console.log("頁面初始化完成");
+});
   
   // 直接綁定事件，不再使用 initializeUI 函數
   const checkInButton = document.getElementById("checkInButton");
