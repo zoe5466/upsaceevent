@@ -4,7 +4,9 @@ import "firebase/firestore";
 import "firebase/auth";
 
 // 初始化 Firebase
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 // 連接到 Firestore
 const db = firebase.firestore();
