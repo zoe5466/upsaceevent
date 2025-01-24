@@ -106,13 +106,17 @@ async function checkIn() {
 
   const existingUser = checkedIn.find((user) => user.name === nameInput);
   if (existingUser) {
+    // 已報到用戶顯示功能區
     checkInMessage.innerText = `您已經報到！組別：${existingUser.group}, 抽獎編號：${existingUser.lotteryNumber}`;
     checkInMessage.style.color = "green";
-    showMainContent(existingUser.group, existingUser.members);
+
+    // 確保更新 UI
+    showMainContent(existingUser.group, groups.find(g => g.name === existingUser.group)?.members || []);
     return;
   }
 
-  assignGroup(nameInput);
+  // 未報到用戶執行分配組別邏輯
+  await assignGroup(nameInput);
 }
 
 // 分配組別
@@ -228,4 +232,15 @@ function updateUncheckedList() {
   const uncheckedList = document.getElementById("uncheckedList");
   const unchecked = participants.filter((name) => !checkedIn.some((user) => user.name === name));
   uncheckedList.innerHTML = unchecked.map((name) => `<li>${name}</li>`).join("");
+}
+
+// 顯示功能區內容
+function showMainContent(groupName, members) {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = `
+    <h2>歡迎來到功能區！</h2>
+    <p>您的組別是：${groupName}</p>
+    <p>當前組別成員：${members.join(", ")}</p>
+  `;
+  mainContent.style.display = "block";
 }
