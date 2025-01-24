@@ -1,59 +1,152 @@
-/* 基本樣式 */
+/* 基本設計 */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  line-height: 1.5;
+  background-color: #fff5e1; /* 輕柔的背景色 */
+  color: #333;
 }
 
+/* 頂部模塊 */
 header {
-  background: #4CAF50;
+  background: linear-gradient(90deg, #d35400, #e74c3c); /* 漸層色背景 */
   color: white;
-  padding: 1rem;
+  padding: 20px;
   text-align: center;
 }
 
-main {
-  padding: 1rem;
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+#lotteryInfo p {
+  margin: 5px 0;
+}
+
+/* 報到區域 */
+#checkInSection {
+  padding: 20px;
+  background: #f6f6f6;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 input[type="text"] {
-  padding: 0.5rem;
-  width: 80%;
-  margin-bottom: 1rem;
+  padding: 10px;
+  width: 70%;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 1rem;
 }
 
 button {
-  background: #4CAF50;
+  background: #d35400; /* 橙色背景 */
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1.1rem;
 }
 
 button:hover {
-  background: #45a049;
+  background: #e67e22; /* 按鈕懸停顏色 */
 }
 
-#animation {
-  font-size: 1.2rem;
-  color: #333;
-  margin: 1rem 0;
+/* 主功能區塊 */
+#mainContent {
+  padding: 20px;
 }
 
-img {
-  margin-top: 1rem;
+#lotteryInfo {
+  padding: 10px;
+  background: #f9f9f9;
+  margin: 10px 0;
+  border-radius: 8px;
+  text-align: center;
 }
 
-#notCheckedInList,
-#checkedInList {
-  list-style-type: none; /* 移除點 */
-  padding: 0; /* 移除內邊距 */
-  margin: 0; /* 移除外邊距 */
+#lotteryNumber, #groupInfo, #groupMemberList {
+  margin: 5px 0;
+}
+
+/* 模塊佈局 */
+.two-column {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#scheduleAndNotice .column {
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+}
+
+h2 {
+  color: #e74c3c;
+  font-size: 1.8rem;
+}
+
+/* 留言板 */
+#messageBoard {
+  padding: 20px;
+  background: #faf2e0;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  resize: none;
+}
+
+#messages {
+  margin-top: 15px;
+}
+
+#messages p {
+  background: #fff;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* 報到狀態 */
+#reportStatus {
+  padding: 20px;
+}
+
+#checkedInList, #uncheckedList {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+#checkedInList li, #uncheckedList li {
+  padding: 8px;
+  background: #f9f9f9;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
 }
 
 /* 手機適配 */
@@ -64,5 +157,13 @@ img {
 
   button {
     width: 90%;
+  }
+
+  .two-column {
+    flex-direction: column;
+  }
+
+  .column {
+    margin-bottom: 20px;
   }
 }
