@@ -49,18 +49,12 @@ img {
   margin-top: 1rem;
 }
 
-#notCheckedInList {
-  list-style-type: none; /* 移除點 */
-  padding: 0; /* 移除內邊距 */
-  margin: 0; /* 移除外邊距 */
-}
-
+#notCheckedInList,
 #checkedInList {
   list-style-type: none; /* 移除點 */
   padding: 0; /* 移除內邊距 */
   margin: 0; /* 移除外邊距 */
 }
-
 
 /* 手機適配 */
 @media (max-width: 768px) {
