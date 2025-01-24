@@ -198,13 +198,25 @@ function updateUncheckedList() {
 // 提交留言
 function submitMessage() {
   const message = document.getElementById("messageInput").value.trim();
-  if (message) {
-    const messages = document.getElementById("messages");
-    if (!messages) return;
+  const messageDisplay = document.getElementById("messageDisplay");
 
-    const newMessage = document.createElement("p");
-    newMessage.innerText = message;
-    messages.appendChild(newMessage);
+  if (message) {
+    const newMessage = document.createElement("div");
+    newMessage.classList.add("message-item");
+
+    // 判斷留言是否為圖片，如果是圖片則插入圖片
+    if (message.includes("http") && (message.includes(".jpg") || message.includes(".png") || message.includes(".gif"))) {
+      const image = document.createElement("img");
+      image.src = message;
+      image.alt = "留言圖片";
+      image.style.width = "50px"; // 可以根據需要修改大小
+      newMessage.appendChild(image);
+    } else {
+      newMessage.innerText = message;
+    }
+
+    // 將新留言插入到顯示區域
+    messageDisplay.appendChild(newMessage);
 
     // 清空留言輸入框
     document.getElementById("messageInput").value = "";
