@@ -40,6 +40,8 @@ input[type="text"] {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
+  outline: none;
+  border: 2px solid #e74c3c; /* 加上紅色邊框 */
 }
 
 button {
@@ -50,10 +52,12 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 加陰影 */
 }
 
 button:hover {
   background: #e67e22; /* 按鈕懸停顏色 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 懸停效果 */
 }
 
 /* 主功能區塊 */
@@ -67,6 +71,7 @@ button:hover {
   margin: 10px 0;
   border-radius: 8px;
   text-align: center;
+  color: #e74c3c
 }
 
 #lotteryNumber, #groupInfo, #groupMemberList {
@@ -99,6 +104,7 @@ button:hover {
 h2 {
   color: #e74c3c;
   font-size: 1.8rem;
+  text-align: center;
 }
 
 /* 留言板 */
@@ -117,6 +123,7 @@ textarea {
   border: 1px solid #ccc;
   font-size: 1rem;
   resize: none;
+  box-sizing: border-box;
 }
 
 #messages {
@@ -129,17 +136,20 @@ textarea {
   margin: 5px 0;
   border-radius: 5px;
   border: 1px solid #ddd;
+  box-sizing: border-box; /* 使大小計算不被padding影響 */
 }
 
 /* 報到狀態 */
 #reportStatus {
   padding: 20px;
+  text-align: center;
 }
 
 #checkedInList, #uncheckedList {
   list-style-type: none;
   padding: 0;
   margin: 10px 0;
+  text-align: center;
 }
 
 #checkedInList li, #uncheckedList li {
