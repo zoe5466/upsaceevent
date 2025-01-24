@@ -44,12 +44,14 @@ let reportCounter = 1;
 
 // 初始化頁面
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("頁面初始化完成");
+  
   const mainContent = document.getElementById("mainContent");
   if (mainContent) {
     mainContent.style.display = "none"; // 初始隱藏
     mainContent.style.visibility = "hidden";
     mainContent.style.opacity = "0";
-  }});
+  }
   
   // 綁定事件
   const checkInButton = document.getElementById("checkInButton");
