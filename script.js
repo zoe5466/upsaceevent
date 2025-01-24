@@ -37,7 +37,7 @@ const groups = [
 ];
 
 const participants = [
-  "test", "宋捷仁", "吳源偵", "劉佳琪", "王佑哲", // ... 剩餘參加者資料
+"test","宋捷仁","吳源偵","劉佳琪","王佑哲","郭丞哲","鄭彥杰","蕭潼","謝昌志","李建緯","黃鈞暉","史倍思","靼魅伊將","張峻銘","傅雨婷","黃偉嘉","沙威霖","邱豐文","徐子媛","郭子豪","黎國珽","曾心慈","石長澄","李東諺","葉晨曦","陳奕華","黃彥程","姚孟宏","周思妤","江亞桐","廖苑杏","吳國銓","洪朋緯","何佩霖","翁資涵","賴正于","翁維廷","張睿昌","周柏均","陳威宇","楊竣翔","游宗諺","張雨柔","廖英德","黃昱銀","吳思萱","鄧至翔","吳建龍","范子謙","鄭騰森","周聖霖","黃鼎鈞","李韶芯","韋伯瑄","沈柏江","胡玥瑩","陳羿均","劉子緒","王妍婷","黃昱嘉","陳俊良","賴筱薇","朱鑫健","陳世勛","石勝安","林沫玨","楊于萱","蔡宗辰","何貞儀","曾韋齊","唐知妘","李欣彥","文韻絜","詹亦軒","林昱學","葉書維","鄭建良","李潔明","馮弼惠","陳德潁","邱士宥","易瑞","孫孟良","朱芳儀","蕭雅方","郭紫嫻","林瑞苑","林今昇","邱浩翔","李振羽","郭相伶","鄭義騰","曾國豪","劉士緯","黃忻宇","邵怡雯","紀茗仁","邱鴻杰","施孟廷","陳怡如","何俊賢","許倧誠","邱金鈺","劉玨琳","張大偉","周運倫","卓濬哲","彭琬媮","陳宗奕","古欣玄","葉宏章","吳國華","譚瑋儒","曾琮皓","王泊淳","李佩珊","李冠瑢","陳嘉德","王俊傑","呂家瑜","林珮緹","陳韋旗","楊博丞","謝鈞豪","許桀煥","何振志","李建宸","林家鴻","楊俊憲","葉惠晴","曾國昌","周乃光"
 ];
 
 let checkedIn = [];
@@ -234,13 +234,17 @@ function updateUncheckedList() {
   uncheckedList.innerHTML = unchecked.map((name) => `<li>${name}</li>`).join("");
 }
 
-// 顯示功能區內容
-function showMainContent(groupName, members) {
+// 顯示主功能區
+function showMainContent(groupName, lotteryNumber, members) {
+  console.log("顯示功能區內容:", groupName, lotteryNumber, members); // 除錯日誌
+
+  // 更新抽獎資訊與組別資訊
+  document.getElementById("lotteryNumber").innerText = `抽獎編號：${lotteryNumber}`;
+  document.getElementById("groupInfo").innerText = `組別：${groupName}`;
+  document.getElementById("groupMemberList").innerText = `組員：${members.join(", ")}`;
+
+  // 顯示主功能區
   const mainContent = document.getElementById("mainContent");
-  mainContent.innerHTML = `
-    <h2>歡迎來到功能區！</h2>
-    <p>您的組別是：${groupName}</p>
-    <p>當前組別成員：${members.join(", ")}</p>
-  `;
   mainContent.style.display = "block";
+  mainContent.style.visibility = "visible"; // 確保可見性
 }
