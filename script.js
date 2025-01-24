@@ -211,11 +211,12 @@ const message = {
   timestamp: new Date().toISOString()
 };
 
-await updateDoc(doc(db, "event-data", "data"), {
-  messages: arrayUnion(message)
-});
-    console.log("留言提交成功！");
-    refreshMessages();
+try {
+  await updateDoc(doc(db, "event-data", "data"), {
+    messages: arrayUnion(message)
+  });
+  console.log("留言提交成功！");
+  refreshMessages();
 } catch (error) {
   console.error("留言提交失敗：", error);
 }
