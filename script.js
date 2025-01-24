@@ -59,10 +59,15 @@ function setupAuthListener() {
 
 // 初始化 UI 元素
 function initializeUI() {
-  document.getElementById("checkInButton").addEventListener("click", checkIn);
+  const checkInButton = document.getElementById("checkInButton");
+  if (checkInButton) {
+    console.log("Button found, binding event...");
+    checkInButton.addEventListener("click", checkIn);
+  } else {
+    console.error("Button not found!");
+  }
   loadDataFromFirebase(); // 加載 Firebase 資料
 }
-
 // 從 Firebase 加載資料
 async function loadDataFromFirebase() {
   try {
@@ -91,6 +96,8 @@ async function checkIn() {
   const nameInput = document.getElementById("name").value.trim();
   const checkInMessage = document.getElementById("checkInMessage");
 
+ console.log("Checking in: ", nameInput);  // 確認是否有進入 checkIn 函數
+  
   if (!participants.includes(nameInput)) {
     checkInMessage.innerText = "名字不在名單中，請確認！";
     checkInMessage.style.color = "red";
@@ -116,6 +123,7 @@ async function assignGroup(nameInput) {
 
   do {
     randomGroup = groups[Math.floor(Math.random() * groups.length)];
+    console.log("Assigning group:", randomGroup.name);  // 追蹤隨機分配的組別
   } while (randomGroup.count >= 13);
 
   randomGroup.count++;
@@ -126,18 +134,22 @@ async function assignGroup(nameInput) {
 
   checkedIn.push(newUser);
 
-  try {
-    // 更新 Firebase 資料
-    await updateDoc(doc(db, "event-data", "data"), {
-      [`groups.${randomGroup.name}.members`]: arrayUnion(nameInput),
-      [`groups.${randomGroup.name}.count`]: randomGroup.count,
-      checkedIn: arrayUnion(newUser)
-    });
+try {
+  await updateDoc(doc(db, "event-data", "data"), {
+    [`groups.${randomGroup.name}.members`]: arrayUnion(nameInput),
+    [`groups.${randomGroup.name}.count`]: randomGroup.count,
+    checkedIn: arrayUnion(newUser)
+  });
+  console.log("資料更新成功！");
+} catch (error) {
+  console.error("資料更新錯誤：", error);
+}
 
     checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
     showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
   } catch (error) {
     console.error("資料更新錯誤：", error);
+    checkInMessage.innerText = "資料更新失敗，請稍後重試。";
   }
 }
 
