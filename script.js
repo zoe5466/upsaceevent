@@ -43,7 +43,11 @@ let reportCounter = 1; // 報到計數器
 document.addEventListener("DOMContentLoaded", () => {
   const mainContent = document.getElementById("mainContent");
   const checkInSection = document.getElementById("checkInSection");
-
+  const checkInButton = document.getElementById("checkInButton"); // 取得按鈕元素
+  
+  if (checkInButton) {
+    checkInButton.addEventListener("click", checkIn); // 綁定 checkIn 函數
+  }
   if (mainContent) {
     mainContent.style.display = "none"; // 初始隱藏主功能區
   }
