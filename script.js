@@ -111,7 +111,9 @@ async function checkIn() {
     checkInMessage.style.color = "green";
 
     // 確保更新 UI
-    showMainContent(existingUser.group, groups.find(g => g.name === existingUser.group)?.members || []);
+    const group = groups.find((g) => g.name === existingUser.group);
+    const members = group ? group.members : []; // 確保 members 是陣列
+    showMainContent(existingUser.group, existingUser.lotteryNumber, members);
     return;
   }
 
@@ -145,7 +147,7 @@ async function assignGroup(nameInput) {
 
     checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
     checkInMessage.style.color = "green";
-    showMainContent(randomGroup.name, randomGroup.members);
+    showMainContent(randomGroup.name, lotteryNumber, randomGroup.members || []);
     updateCheckedInList();
     updateUncheckedList();
   } catch (error) {
@@ -235,16 +237,20 @@ function updateUncheckedList() {
 }
 
 // 顯示主功能區
-function showMainContent(groupName, lotteryNumber, members) {
-  console.log("顯示功能區內容:", groupName, lotteryNumber, members); // 除錯日誌
+function showMainContent(groupName, lotteryNumber, members = []) {
+  console.log("顯示功能區內容：", { groupName, lotteryNumber, members });
 
-  // 更新抽獎資訊與組別資訊
+  // 防止 members 為 undefined
+  if (!Array.isArray(members)) {
+    console.error("members 非陣列，已設為空陣列");
+    members = [];
+    
+    // 更新抽獎資訊與組別資訊
   document.getElementById("lotteryNumber").innerText = `抽獎編號：${lotteryNumber}`;
   document.getElementById("groupInfo").innerText = `組別：${groupName}`;
   document.getElementById("groupMemberList").innerText = `組員：${members.join(", ")}`;
 
   // 顯示主功能區
   const mainContent = document.getElementById("mainContent");
-  mainContent.style.display = "block";
-  mainContent.style.visibility = "visible"; // 確保可見性
+  mainContent.classList.add("show"); // 添加顯示樣式
 }
