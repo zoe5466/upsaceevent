@@ -145,13 +145,6 @@ try {
 } catch (error) {
   console.error("資料更新錯誤：", error);
   checkInMessage.innerText = "資料更新失敗，請稍後重試。";
-}
-
-    checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
-    showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
-  } catch (error) {
-    console.error("資料更新錯誤：", error);
-    checkInMessage.innerText = "資料更新失敗，請稍後重試。";
   }
 }
 
