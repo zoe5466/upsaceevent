@@ -54,12 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     checkInButton.addEventListener("click", checkIn);
   }
   
-  // 增加留言提交按鈕的事件監聽
-  const submitMessageButton = document.getElementById("submitMessageButton");
-  if (submitMessageButton) {
-    submitMessageButton.addEventListener("click", submitMessage);
-  }
-  
   loadDataFromFirebase();
 });
 
@@ -188,6 +182,12 @@ function updateUncheckedList() {
   const unchecked = participants.filter((name) => !checkedIn.some((user) => user.name === name));
   uncheckedList.innerHTML = unchecked.map((name) => `<li>${name}</li>`).join("");
 }
+
+  // 增加留言提交按鈕的事件監聽
+  const submitMessageButton = document.getElementById("submitMessageButton");
+  if (submitMessageButton) {
+    submitMessageButton.addEventListener("click", submitMessage);
+  }
 
 // 提交留言
 async function submitMessage() {
