@@ -45,6 +45,11 @@ let reportCounter = 1;
 // 初始化頁面
 document.addEventListener("DOMContentLoaded", () => {
   const mainContent = document.getElementById("mainContent");
+  if (mainContent) {
+    mainContent.style.display = "none"; // 初始隱藏
+    mainContent.style.visibility = "hidden";
+    mainContent.style.opacity = "0";
+  }});
   
   // 綁定事件
   const checkInButton = document.getElementById("checkInButton");
@@ -165,10 +170,13 @@ function showMainContent(groupName, lotteryNumber, members) {
 
   // 隱藏報到區
   checkInSection.style.display = "none";
-
-  // 顯示主功能區域
-  mainContent.style.display = "block";
   
+  // 顯示主功能區域，設置樣式
+  mainContent.style.display = "block"; // 改為區塊顯示
+  mainContent.style.visibility = "visible"; // 設置為可見
+  mainContent.style.opacity = "1"; // 設置透明度為 1
+  mainContent.style.transition = "opacity 0.5s ease"; // 添加透明度過渡效果
+
   // 更新歡迎信息
   const welcomeMessage = document.getElementById("welcomeMessage");
   if (welcomeMessage) {
