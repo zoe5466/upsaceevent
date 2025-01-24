@@ -7,6 +7,36 @@ body {
   color: #333;
 }
 
+/* 顯示留言的區域 */
+.message-display {
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  background-color: #f9f9f9;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.message-item {
+  display: inline-block;
+  padding: 5px 15px;
+  font-size: 1.2rem;
+  color: #333;
+  background-color: #e67e22;
+  margin-right: 20px;
+  border-radius: 5px;
+  animation: slide-left 10s linear infinite;
+}
+
+@keyframes slide-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 /* 頂部模塊 */
 header {
   background: linear-gradient(90deg, #d35400, #e74c3c); /* 漸層色背景 */
