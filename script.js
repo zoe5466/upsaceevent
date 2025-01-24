@@ -44,7 +44,7 @@ let reportCounter = 1;
 
 // 初始化頁面
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("頁面初始化完成");
+  const mainContent = document.getElementById("mainContent");
   
   // 綁定事件
   const checkInButton = document.getElementById("checkInButton");
@@ -87,6 +87,9 @@ async function loadDataFromFirebase() {
     console.error("Error loading data:", error);
   }
 }
+
+// 確保 checkIn() 函式在外部調用時可以正確訪問
+document.getElementById("checkInButton").addEventListener("click", checkIn);
 
 // 報到功能
 async function checkIn() {
