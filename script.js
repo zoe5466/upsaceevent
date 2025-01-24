@@ -63,15 +63,19 @@ document.addEventListener("DOMContentLoaded", () => {
   loadDataFromFirebase();
 });
 
-// 從 Firebase 加載資料
 function loadDataFromFirebase() {
-  // 使用 Firestore 加載資料
   const dbRef = doc(db, "event-data", "data");
-  setDoc(dbRef, {
-    checkedIn: checkedIn,
-    groups: groups
-  });
-}
+  getDoc(dbRef).then((snapshot) => {
+    const data = snapshot.data();
+    if (data) {
+      // 加載已報到人員和分組資料
+      checkedIn = data.checkedIn || [];
+      groups.forEach(group => {
+        if (data.groups && data.groups[group.name]) {
+          group.members = data.groups[group.name].members || [];
+          group.count = group.members.length;
+        }
+      });
 
 // 確保 `checkIn()` 函式在外部調用時可以正確訪問
 document.getElementById("checkInButton").addEventListener("click", checkIn);
@@ -165,7 +169,14 @@ function showMainContent(groupName, groupMembers) {
   }
 }
 
-// 更新已報到人員列表
+      // 更新頁面顯示
+      updateCheckedInList();
+      updateUncheckedList();
+    }
+  });
+}
+      
+// 更新已報到人員名單
 function updateCheckedInList() {
   const checkedInList = document.getElementById("checkedInList");
   if (!checkedInList) return;
@@ -179,7 +190,7 @@ function updateCheckedInList() {
   });
 }
 
-// 更新尚未報到人員列表
+// 更新未報到人員名單
 function updateUncheckedList() {
   const uncheckedList = document.getElementById("uncheckedList");
   if (!uncheckedList) return;
