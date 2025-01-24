@@ -1,7 +1,6 @@
 // 引入 Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
 
 // Firebase 配置
@@ -19,7 +18,6 @@ const firebaseConfig = {
 // 初始化 Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 const storage = getStorage(app);
 
 // 組別與參加者資料
@@ -47,9 +45,8 @@ let reportCounter = 1;
 // 初始化頁面
 document.addEventListener("DOMContentLoaded", () => {
   console.log("頁面初始化完成");
-});
   
-  // 直接綁定事件，不再使用 initializeUI 函數
+  // 綁定事件
   const checkInButton = document.getElementById("checkInButton");
   if (checkInButton) {
     checkInButton.addEventListener("click", checkIn);
@@ -58,7 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Check-in button not found");
   }
   
+  // 加載數據
   loadDataFromFirebase();
+
+    // 增加留言提交按鈕的事件監聽
+  const submitMessageButton = document.getElementById("submitMessageButton");
+  if (submitMessageButton) {
+    submitMessageButton.addEventListener("click", submitMessage);
+  }
 });
 
 // 從 Firebase 加載資料
@@ -101,7 +105,7 @@ async function checkIn() {
     return;
   }
 
-  // 檢查是否已報到
+  // 檢查是否已經報到
   const existingUser = checkedIn.find((user) => user.name === nameInput);
   if (existingUser) {
     const group = groups.find((g) => g.name === existingUser.group);
@@ -258,5 +262,4 @@ async function refreshMessages() {
   } catch (error) {
     console.error("留言提交失敗：", error);
   }
-}
 }
