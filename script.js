@@ -65,6 +65,9 @@ function loadDataFromFirebase() {
   });
 }
 
+// 確保 `checkIn()` 函式在外部調用時可以正確訪問
+document.getElementById("checkInButton").addEventListener("click", checkIn);
+
 // 報到功能
 function checkIn() {
   const nameInput = document.getElementById("name").value.trim();
