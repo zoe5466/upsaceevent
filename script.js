@@ -212,6 +212,7 @@ async function submitMessage() {
     imageUrl = await getDownloadURL(storageRef);
   }
 
+
 const message = {
   text: messageInput,
   image: imageUrl,
@@ -228,7 +229,7 @@ try {
 } catch (error) {
   console.error("留言提交失敗：", error);
 }
-
+}
 // 刷新留言
 async function refreshMessages() {
   try {
@@ -263,3 +264,4 @@ async function refreshMessages() {
     console.error("留言提交失敗：", error);
   }
 }
+
