@@ -1,6 +1,6 @@
 // 引入 Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getFirestore, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
 // Firebase 配置
@@ -148,6 +148,10 @@ function assignGroup(nameInput) {
   // 更新主介面
   updateHeader(currentUser.lotteryNumber, randomGroup.name, randomGroup.members);
   showMainContent(randomGroup.name, randomGroup.members);
+
+  // 更新已報到和未報到名單
+  updateCheckedInList();
+  updateUncheckedList();
 }
 
 // 更新報到後的資訊
@@ -210,6 +214,36 @@ function updateUncheckedList() {
   });
 }
 
+// Firebase 讀取數據並更新頁面
+function loadDataFromFirebase() {
+  const dbRef = doc(db, "event-data", "data");
+  getDoc(dbRef).then((snapshot) => {
+    const data = snapshot.data();
+    if (data) {
+      // 加載已報到人員和分組資料
+      checkedIn = data.checkedIn || [];
+      groups.forEach(group => {
+        if (data.groups && data.groups[group.name]) {
+          group.members = data.groups[group.name].members || [];
+          group.count = group.members.length;
+        }
+      });
+
+      // 更新頁面顯示
+      updateCheckedInList();
+      updateUncheckedList();
+    }
+  }).catch((error) => {
+    console.error("Error getting document:", error);
+  });
+}
+
+// 每30秒刷新留言
+setInterval(refreshMessages, 30000);
+
+// 用戶資料
+let currentUser = { name: "testUser" };  // 假設用戶名稱為 testUser，實際情況應該來自 Firebase 的認證或其他資料來源
+
 // 綁定提交留言功能
 document.getElementById("submitMessageButton").addEventListener("click", submitMessage);
 
@@ -217,36 +251,82 @@ document.getElementById("submitMessageButton").addEventListener("click", submitM
 function submitMessage() {
   const message = document.getElementById("messageInput").value.trim();
   const messageDisplay = document.getElementById("messageDisplay");
+  const imageInput = document.getElementById("imageInput").files[0];
 
-  if (message) {
+   if (message || imageInput) {
     const newMessage = document.createElement("div");
     newMessage.classList.add("message-item");
 
-    // 判斷留言是否為圖片，如果是圖片則插入圖片
-    if (message.includes("http") && (message.includes(".jpg") || message.includes(".png") || message.includes(".gif"))) {
+    // 顯示留言者名稱
+    const userName = document.createElement("span");
+    userName.innerText = `${currentUser.name}: `;
+    newMessage.appendChild(userName);  
+
+    // 判斷是否為圖片
+    if (imageInput) {
+      const imageUrl = URL.createObjectURL(imageInput);
       const image = document.createElement("img");
-      image.src = message;
+      image.src = imageUrl;
       image.alt = "留言圖片";
       image.style.width = "50px"; // 可以根據需要修改大小
       newMessage.appendChild(image);
     } else {
-      newMessage.innerText = message;
+      newMessage.innerText += message;
     }
 
     // 將新留言插入到顯示區域
     messageDisplay.appendChild(newMessage);
 
-    // 清空留言輸入框
+    // 清空留言輸入框和圖片選擇框
     document.getElementById("messageInput").value = "";
+    document.getElementById("imageInput").value = "";
 
-    // 更新 Firebase 資料（使用 updateDoc）
+    // 更新 Firebase 資料
     const dbRef = doc(db, "event-data", "data");
     updateDoc(dbRef, {
-      messages: firebase.firestore.FieldValue.arrayUnion(message)  // 更新留言數據
-    }).then(() => {
-      console.log("留言更新成功！");
-    }).catch((error) => {
-      console.error("留言更新錯誤：", error);
+      messages: arrayUnion({
+        text: message,
+        image: imageInput ? imageUrl : null,
+        user: currentUser.name,
+        timestamp: new Date()
+      })
     });
   }
 }
+
+// 刷新留言顯示
+function refreshMessages() {
+  const dbRef = doc(db, "event-data", "data");
+  getDoc(dbRef).then((snapshot) => {
+    const data = snapshot.data();
+    if (data && data.messages) {
+      const messages = data.messages.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10); // 最新的10條消息
+
+      const messageDisplay = document.getElementById("messageDisplay");
+      messageDisplay.innerHTML = "";  // 清空現有的留言
+
+      messages.forEach(msg => {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message-item");
+
+        const userName = document.createElement("span");
+        userName.innerText = `${msg.user}: `;
+        messageElement.appendChild(userName);
+
+        // 如果有圖片
+        if (msg.image) {
+          const image = document.createElement("img");
+          image.src = msg.image;
+          image.alt = "留言圖片";
+          image.style.width = "50px";
+          messageElement.appendChild(image);
+        } else {
+          messageElement.innerText += msg.text;
+        }
+
+        messageDisplay.appendChild(messageElement);
+      });
+    }
+  });
+}
+
