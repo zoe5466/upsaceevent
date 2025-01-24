@@ -98,20 +98,10 @@ async function checkIn() {
     return;
   }
 
-  const existingUser = checkedIn.find((user) => user.name === nameInput);
+   const existingUser = checkedIn.find((user) => user.name === nameInput);
   if (existingUser) {
     const group = groups.find((g) => g.name === existingUser.group);
-    const members = group ? group.members : [];
-    checkInMessage.innerText = `您已經報到！組別：${existingUser.group}, 抽獎編號：${existingUser.lotteryNumber}`;
-    checkInMessage.style.color = "green";
-    showMainContent(existingUser.group, existingUser.lotteryNumber, members);
-    return;
-  }
-
-    // 確保更新 UI
-    const group = groups.find((g) => g.name === existingUser.group);
-    const members = group ? group.members : []; // 確保 members 是陣列
-    showMainContent(existingUser.group, existingUser.lotteryNumber, members);
+    showMainContent(existingUser.group, existingUser.lotteryNumber, group.members);
     return;
   }
 
@@ -142,20 +132,13 @@ async function assignGroup(nameInput) {
       [`groups.${randomGroup.name}.count`]: randomGroup.count,
       checkedIn: arrayUnion(newUser)
     });
-
-
-  console.log("分組後的數據：", randomGroup);
-
+    
     checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
-    checkInMessage.style.color = "green";
     showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
-    updateCheckedInList();
-    updateUncheckedList();
   } catch (error) {
     console.error("資料更新錯誤：", error);
   }
 }
-
 
   updateHeader(lotteryNumber, randomGroup.name, randomGroup.members);
   showMainContent(randomGroup.name, randomGroup.members);
@@ -250,23 +233,15 @@ function updateUncheckedList() {
 }
 
 // 顯示主功能區
-function showMainContent(groupName, lotteryNumber, members = []) {
-  const mainContent = document.getElementById("mainContent");
-  const checkInSection = document.getElementById("checkInSection");
-  if (mainContent && checkInSection) {
-    checkInSection.style.display = "none";
-    mainContent.style.display = "block";
-  } else {
-    console.error("主功能區或報到區未找到！");
-    return;
-  }
-
-  // 更新抽獎資訊與組別資訊
+function showMainContent(groupName, lotteryNumber, members) {
+  document.getElementById("checkInSection").style.display = "none";
+  document.getElementById("mainContent").style.display = "block";
   document.getElementById("lotteryNumber").innerText = `抽獎編號：${lotteryNumber}`;
   document.getElementById("groupInfo").innerText = `組別：${groupName}`;
   document.getElementById("groupMemberList").innerText = `組員：${members.join(", ")}`;
+}
 
   // 隱藏報到區並顯示主功能區
   document.getElementById("checkInSection").style.display = "none";
   document.getElementById("mainContent").style.display = "block";
-}
+
