@@ -3,11 +3,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
-// 初始化 Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
 const firebaseConfig = {
   apiKey: "AIzaSyDvnb7zYxmaT6bE44PpHpkx5eSL5vfQTyc",
   authDomain: "upsaceevent.firebaseapp.com",
@@ -18,6 +13,11 @@ const firebaseConfig = {
   appId: "1:927813294597:web:7b868bee2602a9d92b1a6c",
   measurementId: "G-LFGRN0KV0G"
 };
+
+// 初始化 Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 // 組別與座位圖
 const groups = [
