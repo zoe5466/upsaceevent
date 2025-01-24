@@ -47,27 +47,22 @@ let reportCounter = 1;
 // 初始化頁面
 document.addEventListener("DOMContentLoaded", () => {
   setupAuthListener();
-  initializeUI();
-});
-
-// 設置用戶認證監聽器
-function setupAuthListener() {
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user ? { name: user.displayName || "Anonymous", uid: user.uid } : null;
-  });
-}
-
-// 初始化 UI 元素
-function initializeUI() {
+  
+  // 直接綁定事件，不再使用 initializeUI 函數
   const checkInButton = document.getElementById("checkInButton");
   if (checkInButton) {
-    console.log("Button found, binding event...");
     checkInButton.addEventListener("click", checkIn);
-  } else {
-    console.error("Button not found!");
   }
-  loadDataFromFirebase(); // 加載 Firebase 資料
-}
+  
+  // 增加留言提交按鈕的事件監聽
+  const submitMessageButton = document.getElementById("submitMessageButton");
+  if (submitMessageButton) {
+    submitMessageButton.addEventListener("click", submitMessage);
+  }
+  
+  loadDataFromFirebase();
+});
+
 // 從 Firebase 加載資料
 async function loadDataFromFirebase() {
   try {
@@ -96,9 +91,13 @@ async function checkIn() {
   const nameInput = document.getElementById("name").value.trim();
   const checkInMessage = document.getElementById("checkInMessage");
 
- console.log("Checking in: ", nameInput);  // 確認是否有進入 checkIn 函數
-  
-  if (!participants.includes(nameInput)) {
+  if (!nameInput) {
+    checkInMessage.innerText = "請輸入姓名！";
+    checkInMessage.style.color = "red";
+    return;
+  }
+
+    if (!participants.includes(nameInput)) {
     checkInMessage.innerText = "名字不在名單中，請確認！";
     checkInMessage.style.color = "red";
     return;
@@ -141,8 +140,11 @@ try {
     checkedIn: arrayUnion(newUser)
   });
   console.log("資料更新成功！");
+  checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
+  showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
 } catch (error) {
   console.error("資料更新錯誤：", error);
+  checkInMessage.innerText = "資料更新失敗，請稍後重試。";
 }
 
     checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
