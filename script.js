@@ -175,14 +175,7 @@ function showMainContent(groupName, groupMembers) {
     welcomeMessage.innerText = `歡迎您！您的組別為：${groupName}`;
   }
 }
-
-      // 更新頁面顯示
-      updateCheckedInList();
-      updateUncheckedList();
-    }
-  });
-}
-      
+    
 // 更新已報到人員名單
 function updateCheckedInList() {
   const checkedInList = document.getElementById("checkedInList");
