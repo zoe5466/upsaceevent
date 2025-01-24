@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkInButton = document.getElementById("checkInButton");
   if (checkInButton) {
     checkInButton.addEventListener("click", checkIn);
+    console.log("Check-in button initialized");
+  } else {
+    console.error("Check-in button not found");
   }
   
   loadDataFromFirebase();
