@@ -53,19 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
 // 設置用戶認證監聽器
 function setupAuthListener() {
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      currentUser = { name: user.displayName || "Anonymous", uid: user.uid };
-    } else {
-      currentUser = null;
-      console.log("未登入用戶");
-    }
+    currentUser = user ? { name: user.displayName || "Anonymous", uid: user.uid } : null;
   });
 }
 
-// 初始化 UI 元素
+
+/// 初始化 UI 元素
 function initializeUI() {
   document.getElementById("checkInButton").addEventListener("click", checkIn);
-  document.getElementById("submitMessageButton").addEventListener("click", submitMessage);
   loadDataFromFirebase();
 }
 
@@ -74,7 +69,6 @@ async function loadDataFromFirebase() {
   try {
     const snapshot = await getDoc(doc(db, "event-data", "data"));
     const data = snapshot.data();
-
     if (data) {
       checkedIn = data.checkedIn || [];
       groups.forEach((group) => {
@@ -106,9 +100,13 @@ async function checkIn() {
 
   const existingUser = checkedIn.find((user) => user.name === nameInput);
   if (existingUser) {
-    // 已報到用戶顯示功能區
+    const group = groups.find((g) => g.name === existingUser.group);
+    const members = group ? group.members : [];
     checkInMessage.innerText = `您已經報到！組別：${existingUser.group}, 抽獎編號：${existingUser.lotteryNumber}`;
     checkInMessage.style.color = "green";
+    showMainContent(existingUser.group, existingUser.lotteryNumber, members);
+    return;
+  }
 
     // 確保更新 UI
     const group = groups.find((g) => g.name === existingUser.group);
@@ -145,14 +143,25 @@ async function assignGroup(nameInput) {
       checkedIn: arrayUnion(newUser)
     });
 
+
+  console.log("分組後的數據：", randomGroup);
+
     checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
     checkInMessage.style.color = "green";
-    showMainContent(randomGroup.name, lotteryNumber, randomGroup.members || []);
+    showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
     updateCheckedInList();
     updateUncheckedList();
   } catch (error) {
     console.error("資料更新錯誤：", error);
   }
+}
+
+
+  updateHeader(lotteryNumber, randomGroup.name, randomGroup.members);
+  showMainContent(randomGroup.name, randomGroup.members);
+
+  updateCheckedInList();
+  updateUncheckedList();
 }
 
 // 提交留言
@@ -179,8 +188,12 @@ async function submitMessage() {
 
   try {
     await updateDoc(doc(db, "event-data", "data"), {
-      messages: arrayUnion(message)
-    });
+      messages: arrayUnion({
+  text: message,
+  image: imageUrl,
+  user: currentUser.name || "Anonymous",
+  timestamp: new Date().toISOString()
+});
     console.log("留言提交成功！");
     refreshMessages();
   } catch (error) {
@@ -238,19 +251,22 @@ function updateUncheckedList() {
 
 // 顯示主功能區
 function showMainContent(groupName, lotteryNumber, members = []) {
-  console.log("顯示功能區內容：", { groupName, lotteryNumber, members });
+  const mainContent = document.getElementById("mainContent");
+  const checkInSection = document.getElementById("checkInSection");
+  if (mainContent && checkInSection) {
+    checkInSection.style.display = "none";
+    mainContent.style.display = "block";
+  } else {
+    console.error("主功能區或報到區未找到！");
+    return;
+  }
 
-  // 防止 members 為 undefined
-  if (!Array.isArray(members)) {
-    console.error("members 非陣列，已設為空陣列");
-    members = [];
-    
-    // 更新抽獎資訊與組別資訊
+  // 更新抽獎資訊與組別資訊
   document.getElementById("lotteryNumber").innerText = `抽獎編號：${lotteryNumber}`;
   document.getElementById("groupInfo").innerText = `組別：${groupName}`;
   document.getElementById("groupMemberList").innerText = `組員：${members.join(", ")}`;
 
-  // 顯示主功能區
-  const mainContent = document.getElementById("mainContent");
-  mainContent.classList.add("show"); // 添加顯示樣式
+  // 隱藏報到區並顯示主功能區
+  document.getElementById("checkInSection").style.display = "none";
+  document.getElementById("mainContent").style.display = "block";
 }
