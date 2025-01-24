@@ -90,9 +90,18 @@ button:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 懸停效果 */
 }
 
-/* 主功能區塊 */
 #mainContent {
+  display: none; /* 預設隱藏 */
+  visibility: hidden; /* 防止被看見 */
+  opacity: 0; /* 初始完全透明 */
+  transition: visibility 0s, opacity 0.5s ease; /* 添加過渡效果 */
   padding: 20px;
+}
+
+#mainContent.show {
+  display: block;
+  visibility: visible;
+  opacity: 1; /* 完全可見 */
 }
 
 #lotteryInfo {
