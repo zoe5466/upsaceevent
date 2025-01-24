@@ -71,6 +71,7 @@ button:hover {
 
 #lotteryNumber, #groupInfo, #groupMemberList {
   margin: 5px 0;
+  color: #e74c3c
 }
 
 /* 模塊佈局 */
