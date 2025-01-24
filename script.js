@@ -1,6 +1,6 @@
 // 引入 Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
 // Firebase 配置
@@ -64,25 +64,25 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadDataFromFirebase() {
-  const dbRef = doc(db, "event-data", "data");
-  getDoc(dbRef).then((snapshot) => {
-    const data = snapshot.data();
+  const dbRef = doc(db, "event-data", "data"); // 指定文檔
+  getDoc(dbRef).then((snapshot) => {  // 使用 getDoc 來獲取文檔
+    const data = snapshot.data(); // 取得文檔的資料
     if (data) {
       // 加載已報到人員和分組資料
       checkedIn = data.checkedIn || [];
-     groups.forEach(group => {
+      groups.forEach(group => {
         if (data.groups && data.groups[group.name]) {
           group.members = data.groups[group.name].members || [];
           group.count = group.members.length;
         }
       });
-    
-    updateCheckedInList();
-    updateUncheckedList();
-  }
-}).catch((error) => {
-  console.error("資料加載錯誤：", error);
-});
+      updateCheckedInList();
+      updateUncheckedList();
+    }
+  }).catch((error) => {
+    console.error("Error getting document:", error); // 處理錯誤
+  });
+}
       
 // 確保 `checkIn()` 函式在外部調用時可以正確訪問
 document.getElementById("checkInButton").addEventListener("click", checkIn);
@@ -213,7 +213,7 @@ function updateUncheckedList() {
 // 綁定提交留言功能
 document.getElementById("submitMessageButton").addEventListener("click", submitMessage);
 
-//// 提交留言
+// 提交留言功能
 function submitMessage() {
   const message = document.getElementById("messageInput").value.trim();
   const messageDisplay = document.getElementById("messageDisplay");
@@ -239,10 +239,14 @@ function submitMessage() {
     // 清空留言輸入框
     document.getElementById("messageInput").value = "";
 
-    // 更新 Firebase 資料（如果需要的話）
+    // 更新 Firebase 資料（使用 updateDoc）
     const dbRef = doc(db, "event-data", "data");
     updateDoc(dbRef, {
-      messages: firebase.firestore.FieldValue.arrayUnion(message)  // 這是範例，根據需要進行調整
+      messages: firebase.firestore.FieldValue.arrayUnion(message)  // 更新留言數據
+    }).then(() => {
+      console.log("留言更新成功！");
+    }).catch((error) => {
+      console.error("留言更新錯誤：", error);
     });
   }
 }
