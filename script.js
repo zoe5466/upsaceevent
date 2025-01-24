@@ -70,12 +70,19 @@ function loadDataFromFirebase() {
     if (data) {
       // 加載已報到人員和分組資料
       checkedIn = data.checkedIn || [];
-      groups.forEach(group => {
+     groups.forEach(group => {
         if (data.groups && data.groups[group.name]) {
           group.members = data.groups[group.name].members || [];
           group.count = group.members.length;
         }
       });
+    
+    updateCheckedInList();
+    updateUncheckedList();
+  }
+}).catch((error) => {
+  console.error("資料加載錯誤：", error);
+});
       
 // 確保 `checkIn()` 函式在外部調用時可以正確訪問
 document.getElementById("checkInButton").addEventListener("click", checkIn);
