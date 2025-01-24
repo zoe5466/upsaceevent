@@ -126,25 +126,17 @@ async function assignGroup(nameInput) {
 
   checkedIn.push(newUser);
 
-  try {
-    await updateDoc(doc(db, "event-data", "data"), {
-      [`groups.${randomGroup.name}.members`]: arrayUnion(nameInput),
-      [`groups.${randomGroup.name}.count`]: randomGroup.count,
-      checkedIn: arrayUnion(newUser)
-    });
+try {
+  await updateDoc(doc(db, "event-data", "data"), {
+    [`groups.${randomGroup.name}.members`]: arrayUnion(nameInput),
+    [`groups.${randomGroup.name}.count`]: randomGroup.count,
+    checkedIn: arrayUnion(newUser)
+  });
     
-    checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
-    showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
-  } catch (error) {
-    console.error("資料更新錯誤：", error);
-  }
-}
-
-  updateHeader(lotteryNumber, randomGroup.name, randomGroup.members);
-  showMainContent(randomGroup.name, randomGroup.members);
-
-  updateCheckedInList();
-  updateUncheckedList();
+  checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
+  showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
+} catch (error) {
+  console.error("資料更新錯誤：", error);
 }
 
 // 提交留言
@@ -162,26 +154,20 @@ async function submitMessage() {
     imageUrl = await getDownloadURL(storageRef);
   }
 
-  const message = {
-    text: messageInput || null,
-    image: imageUrl,
-    user: currentUser?.name || "Anonymous",
-    timestamp: new Date().toISOString()
-  };
-
-  try {
-    await updateDoc(doc(db, "event-data", "data"), {
-      messages: arrayUnion({
-  text: message,
+const message = {
+  text: messageInput,
   image: imageUrl,
-  user: currentUser.name || "Anonymous",
+  user: currentUser?.name || "Anonymous",
   timestamp: new Date().toISOString()
+};
+
+await updateDoc(doc(db, "event-data", "data"), {
+  messages: arrayUnion(message)
 });
     console.log("留言提交成功！");
     refreshMessages();
-  } catch (error) {
-    console.error("留言提交失敗：", error);
-  }
+} catch (error) {
+  console.error("留言提交失敗：", error);
 }
 
 // 刷新留言
@@ -214,9 +200,10 @@ async function refreshMessages() {
 
       messageDisplay.appendChild(messageElement);
     });
-  } catch (error) {
-    console.error("留言刷新失敗：", error);
-  }
+catch (error) {
+  console.error("留言提交失敗：", error);
+  alert("留言提交失敗，請稍後重試。");
+}
 }
 
 // 更新已報到人員
@@ -238,10 +225,5 @@ function showMainContent(groupName, lotteryNumber, members) {
   document.getElementById("mainContent").style.display = "block";
   document.getElementById("lotteryNumber").innerText = `抽獎編號：${lotteryNumber}`;
   document.getElementById("groupInfo").innerText = `組別：${groupName}`;
-  document.getElementById("groupMemberList").innerText = `組員：${members.join(", ")}`;
+  document.getElementById("groupMemberList").innerText = `組員：${(members || []).join(", ")}`;
 }
-
-  // 隱藏報到區並顯示主功能區
-  document.getElementById("checkInSection").style.display = "none";
-  document.getElementById("mainContent").style.display = "block";
-
