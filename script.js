@@ -57,11 +57,10 @@ function setupAuthListener() {
   });
 }
 
-
-/// 初始化 UI 元素
+// 初始化 UI 元素
 function initializeUI() {
   document.getElementById("checkInButton").addEventListener("click", checkIn);
-  loadDataFromFirebase();
+  loadDataFromFirebase(); // 加載 Firebase 資料
 }
 
 // 從 Firebase 加載資料
@@ -98,7 +97,8 @@ async function checkIn() {
     return;
   }
 
-   const existingUser = checkedIn.find((user) => user.name === nameInput);
+  // 檢查是否已報到
+  const existingUser = checkedIn.find((user) => user.name === nameInput);
   if (existingUser) {
     const group = groups.find((g) => g.name === existingUser.group);
     showMainContent(existingUser.group, existingUser.lotteryNumber, group.members);
@@ -109,7 +109,7 @@ async function checkIn() {
   await assignGroup(nameInput);
 }
 
-// 分配組別
+/// 分配組別
 async function assignGroup(nameInput) {
   const checkInMessage = document.getElementById("checkInMessage");
   let randomGroup;
@@ -126,17 +126,60 @@ async function assignGroup(nameInput) {
 
   checkedIn.push(newUser);
 
-try {
-  await updateDoc(doc(db, "event-data", "data"), {
-    [`groups.${randomGroup.name}.members`]: arrayUnion(nameInput),
-    [`groups.${randomGroup.name}.count`]: randomGroup.count,
-    checkedIn: arrayUnion(newUser)
-  });
-    
-  checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
-  showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
-} catch (error) {
-  console.error("資料更新錯誤：", error);
+  try {
+    // 更新 Firebase 資料
+    await updateDoc(doc(db, "event-data", "data"), {
+      [`groups.${randomGroup.name}.members`]: arrayUnion(nameInput),
+      [`groups.${randomGroup.name}.count`]: randomGroup.count,
+      checkedIn: arrayUnion(newUser)
+    });
+
+    checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
+    showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
+  } catch (error) {
+    console.error("資料更新錯誤：", error);
+  }
+}
+
+// 顯示主功能區
+function showMainContent(groupName, lotteryNumber, members) {
+  const checkInSection = document.getElementById("checkInSection");
+  const mainContent = document.getElementById("mainContent");
+
+  if (!checkInSection || !mainContent) {
+    console.error("HTML 結構中缺少 checkInSection 或 mainContent！");
+    return;
+  }
+
+  // 隱藏報到區
+  checkInSection.style.display = "none";
+
+  // 顯示主功能區域
+  mainContent.style.display = "block";
+  
+  // 更新歡迎信息
+  const welcomeMessage = document.getElementById("welcomeMessage");
+  if (welcomeMessage) {
+    welcomeMessage.innerText = `歡迎您！您的組別為：${groupName}`;
+  }
+
+  // 更新報到資訊
+  document.getElementById("lotteryNumber").innerText = `抽獎編號：${lotteryNumber}`;
+  document.getElementById("groupInfo").innerText = `組別：${groupName}`;
+  document.getElementById("groupMemberList").innerText = `組員：${members.join(", ")}`;
+}
+
+// 更新已報到人員
+function updateCheckedInList() {
+  const checkedInList = document.getElementById("checkedInList");
+  checkedInList.innerHTML = checkedIn.map((user) => `<li>${user.name}</li>`).join("");
+}
+
+// 更新未報到人員
+function updateUncheckedList() {
+  const uncheckedList = document.getElementById("uncheckedList");
+  const unchecked = participants.filter((name) => !checkedIn.some((user) => user.name === name));
+  uncheckedList.innerHTML = unchecked.map((name) => `<li>${name}</li>`).join("");
 }
 
 // 提交留言
@@ -200,30 +243,9 @@ async function refreshMessages() {
 
       messageDisplay.appendChild(messageElement);
     });
-catch (error) {
-  console.error("留言提交失敗：", error);
-  alert("留言提交失敗，請稍後重試。");
-}
-}
-
-// 更新已報到人員
-function updateCheckedInList() {
-  const checkedInList = document.getElementById("checkedInList");
-  checkedInList.innerHTML = checkedIn.map((user) => `<li>${user.name}</li>`).join("");
+  } catch (error) {
+    console.error("留言提交失敗：", error);
+  }
 }
 
-// 更新未報到人員
-function updateUncheckedList() {
-  const uncheckedList = document.getElementById("uncheckedList");
-  const unchecked = participants.filter((name) => !checkedIn.some((user) => user.name === name));
-  uncheckedList.innerHTML = unchecked.map((name) => `<li>${name}</li>`).join("");
-}
 
-// 顯示主功能區
-function showMainContent(groupName, lotteryNumber, members) {
-  document.getElementById("checkInSection").style.display = "none";
-  document.getElementById("mainContent").style.display = "block";
-  document.getElementById("lotteryNumber").innerText = `抽獎編號：${lotteryNumber}`;
-  document.getElementById("groupInfo").innerText = `組別：${groupName}`;
-  document.getElementById("groupMemberList").innerText = `組員：${(members || []).join(", ")}`;
-}
