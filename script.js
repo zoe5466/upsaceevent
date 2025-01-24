@@ -77,6 +77,13 @@ function loadDataFromFirebase() {
         }
       });
 
+      // 更新頁面顯示
+      updateCheckedInList();
+      updateUncheckedList();
+    }
+  });
+}
+      
 // 確保 `checkIn()` 函式在外部調用時可以正確訪問
 document.getElementById("checkInButton").addEventListener("click", checkIn);
 
@@ -206,7 +213,10 @@ function updateUncheckedList() {
   });
 }
 
-// 提交留言
+// 綁定提交留言功能
+document.getElementById("submitMessageButton").addEventListener("click", submitMessage);
+
+//// 提交留言
 function submitMessage() {
   const message = document.getElementById("messageInput").value.trim();
   const messageDisplay = document.getElementById("messageDisplay");
@@ -231,5 +241,11 @@ function submitMessage() {
 
     // 清空留言輸入框
     document.getElementById("messageInput").value = "";
+
+    // 更新 Firebase 資料（如果需要的話）
+    const dbRef = doc(db, "event-data", "data");
+    updateDoc(dbRef, {
+      messages: firebase.firestore.FieldValue.arrayUnion(message)  // 這是範例，根據需要進行調整
+    });
   }
 }
