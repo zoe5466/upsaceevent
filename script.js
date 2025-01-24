@@ -1,8 +1,9 @@
 // 引入 Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
+// Firebase 配置
 const firebaseConfig = {
   apiKey: "AIzaSyDvnb7zYxmaT6bE44PpHpkx5eSL5vfQTyc",
   authDomain: "upsaceevent.firebaseapp.com",
@@ -56,23 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 從 Firebase 加載資料
 function loadDataFromFirebase() {
-  const dbRef = ref(database, "event-data/");
-  onValue(dbRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      // 加載已報到人員和分組資料
-      checkedIn = data.checkedIn || [];
-      groups.forEach(group => {
-        if (data.groups && data.groups[group.name]) {
-          group.members = data.groups[group.name].members || [];
-          group.count = group.members.length;
-        }
-      });
-
-      // 更新頁面顯示
-      updateCheckedInList();
-      updateUncheckedList();
-    }
+  // 使用 Firestore 加載資料
+  const dbRef = doc(db, "event-data", "data");
+  setDoc(dbRef, {
+    checkedIn: checkedIn,
+    groups: groups
   });
 }
 
@@ -120,9 +109,9 @@ function assignGroup(nameInput) {
   }; // 紀錄訪客身份
 
   // 更新 Firebase 資料
-  const dbRef = ref(database, "event-data/");
-  update(dbRef, {
-    [`groups/${randomGroup.name}/members`]: randomGroup.members,
+  const dbRef = doc(db, "event-data", "data");
+  setDoc(dbRef, {
+    groups: groups,
     checkedIn: checkedIn
   });
 
@@ -194,7 +183,6 @@ function updateUncheckedList() {
     }
   });
 }
-
 
 // 提交留言
 function submitMessage() {
