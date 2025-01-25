@@ -288,45 +288,36 @@ async function refreshMessages() {
     const messages = data?.messages || [];
 
     const messageDisplay = document.getElementById("messageDisplay");
-    messageDisplay.innerHTML = ""; // 清空舊的留言
+    const messageContainer = document.createElement("div");
+    messageContainer.classList.add("message-container");
 
     // 保持最多顯示 8 條留言
     const limitedMessages = messages.slice(-8); // 取最後 8 條
 
     // 動態生成留言元素
-    limitedMessages.forEach((msg, index) => {
+    limitedMessages.forEach((msg) => {
       const messageElement = document.createElement("div");
       messageElement.classList.add("message-item");
 
-        // 設置滾動間隔
-      messageElement.style.setProperty("--index", index);
-
-
-      
       const userName = document.createElement("strong");
       userName.innerText = `${msg.user}: `;
       messageElement.appendChild(userName);
 
-      // 設置留言內容
-      messageElement.innerText = `${msg.user}: ${msg.text}`;
-      messageDisplay.appendChild(messageElement);
-      
+      const messageText = document.createElement("span");
+      messageText.innerText = msg.text;
+      messageElement.appendChild(messageText);
+
+      messageContainer.appendChild(messageElement);
     });
     
-    // 自動滾動實現循環效果
-    if (limitedMessages.length === 8) {
-      const firstMessage = messageDisplay.firstChild;
-      if (firstMessage) {
-        // 複製第一條留言到末尾
-        const clonedMessage = firstMessage.cloneNode(true);
-        messageDisplay.appendChild(clonedMessage);
+    // 清空舊內容，添加新的留言容器
+    messageDisplay.innerHTML = "";
+    messageDisplay.appendChild(messageContainer);
 
-        // 刪除原始第一條留言，確保無縫滾動
-        setTimeout(() => {
-          firstMessage.remove();
-        }, 10000); // 動畫完成後移除
-      }
-    }
+    // 確保跑馬燈效果（CSS 控制）
+    const totalWidth = messageContainer.scrollWidth;
+    const duration = totalWidth / 50; // 控制滾動速度，50px/s
+    messageContainer.style.animation = `marquee ${duration}s linear infinite`;
   } catch (error) {
     console.error("刷新留言失敗：", error);
   }
