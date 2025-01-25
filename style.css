@@ -194,7 +194,7 @@ textarea {
 /* 已報到與尚未報到人員名單分三欄 */
 .multi-column {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 三欄 */
+  grid-template-columns: repeat(4, 1fr); /* 4欄 */
   gap: 10px; /* 欄間距 */
   list-style: none;
   padding: 0;
