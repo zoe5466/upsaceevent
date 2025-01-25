@@ -20,35 +20,37 @@ a {
 .message-display {
   white-space: nowrap;
   width: 100%;
-  height: 200px; /* 固定高度 */
-  overflow-x: auto; /* 開啟水平滾動條 */
+  height: auto; /* 自適應留言內容的高度 */
+  max-height: 150px; /* 最大高度設置為150px，避免過大 */
+  overflow-x: hidden; /* 隱藏水平滾動條 */
   overflow-y: hidden; /* 隱藏垂直滾動條 */
   position: relative;
   background-color: #f9f9f9;
   border-radius: 10px;
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 5px; /* 減少內部間距 */
   box-sizing: border-box;
 }
 
 .message-item {
   display: inline-block;
-  padding: 5px 15px;
-  font-size: 1.2rem;
+  padding: 5px 10px; /* 調整內部空間以適配手機 */
+  font-size: 1rem; /* 縮小字體 */
   color: #333;
   background-color: #e67e22;
-  margin-right: 20px;
+  margin-right: 10px; /* 減少間距 */
   border-radius: 5px;
-  animation: slide-left 10s linear infinite; /* 橫向滾動動畫 */
   white-space: nowrap; /* 確保單條留言不會換行 */
+  animation: slide-left 10s linear infinite; /* 10秒一致滾動 */
+  animation-delay: calc(var(--index) * 2s); /* 每條留言有固定間隔 */
 }
 
 @keyframes slide-left {
   0% {
-    transform: translateX(100%);
+    transform: translateX(100%); /* 從右側進入 */
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-100%); /* 滾動到左側 */
   }
 }
 
@@ -235,5 +237,15 @@ textarea {
 
   .column {
     margin-bottom: 20px;
+  }
+
+    .message-display {
+    max-height: 100px; /* 手機上高度更小 */
+    padding: 3px; /* 減少內間距 */
+  }
+
+  .message-item {
+    font-size: 0.9rem; /* 手機上文字更小 */
+    margin-right: 5px; /* 減少留言間距 */
   }
 }
