@@ -215,33 +215,43 @@ async function submitMessage() {
   const messageInput = document.getElementById("messageInput").value.trim();
   const imageInput = document.getElementById("imageInput").files[0];
 
-  if (!messageInput && !imageInput) return;
+  // 確保 imageInput 存在
+  if (!imageInput) {
+    console.error("imageInput 元素不存在，請檢查 HTML 結構！");
+    return;
+  }
+
+  const imageFile = imageInput.files[0];
+
+  if (!messageInput && !imageFile) {
+    console.error("留言或圖片未提供！");
+    return;
+  }
 
   let imageUrl = null;
 
-  if (imageInput) {
-    const storageRef = ref(storage, `messages/${Date.now()}_${imageInput.name}`);
-    await uploadBytes(storageRef, imageInput);
+  if (imageFile) {
+    const storageRef = ref(storage, `messages/${Date.now()}_${imageFile.name}`);
+    await uploadBytes(storageRef, imageFile);
     imageUrl = await getDownloadURL(storageRef);
   }
 
+  const message = {
+    text: messageInput,
+    image: imageUrl,
+    user: currentUser?.name || "Anonymous",
+    timestamp: new Date().toISOString(),
+  };
 
-const message = {
-  text: messageInput,
-  image: imageUrl,
-  user: currentUser?.name || "Anonymous",
-  timestamp: new Date().toISOString()
-};
-
-try {
-  await updateDoc(doc(db, "event-data", "data"), {
-    messages: arrayUnion(message)
-  });
-  console.log("留言提交成功！");
-  refreshMessages();
-} catch (error) {
-  console.error("留言提交失敗：", error);
-}
+  try {
+    await updateDoc(doc(db, "event-data", "data"), {
+      messages: arrayUnion(message),
+    });
+    console.log("留言提交成功！");
+    refreshMessages();
+  } catch (error) {
+    console.error("留言提交失敗：", error);
+  }
 }
 // 刷新留言
 async function refreshMessages() {
