@@ -122,11 +122,16 @@ async function checkIn() {
   if (existingUser) {
     const group = groups.find((g) => g.name === existingUser.group);
     showMainContent(existingUser.group, existingUser.lotteryNumber, group.members);
+    
+    // 設置當前用戶為已報到用戶
+    currentUser = { name: existingUser.name };   
     return;
   }
 
   // 未報到用戶執行分配組別邏輯
   await assignGroup(nameInput);
+  // 設置當前用戶為新報到用戶
+  currentUser = { name: nameInput };
 }
 
 /// 分配組別
@@ -245,9 +250,10 @@ if (imageFile) {
     timestamp: new Date().toISOString(),
   };
 
-try {
+  try {
+    // 更新留言資料到 Firebase
     await updateDoc(doc(db, "event-data", "data"), {
-        messages: arrayUnion(message),
+      messages: arrayUnion(message),
     });
     console.log("留言提交成功！");
 
@@ -275,28 +281,32 @@ async function refreshMessages() {
     const messageDisplay = document.getElementById("messageDisplay");
     messageDisplay.innerHTML = "";
 
-    messages.slice(-10).forEach((msg) => {
+    // 保持最多顯示 8 條留言
+    const limitedMessages = messages.slice(-8); // 取最後 8 條
+
+    limitedMessages.forEach((msg) => {
       const messageElement = document.createElement("div");
       messageElement.classList.add("message-item");
 
-      const userName = document.createElement("span");
+      const userName = document.createElement("strong");
       userName.innerText = `${msg.user}: `;
       messageElement.appendChild(userName);
 
-      if (msg.image) {
-        const image = document.createElement("img");
-        image.src = msg.image;
-        image.alt = "留言圖片";
-        image.style.width = "50px";
-        messageElement.appendChild(image);
-      } else if (msg.text) {
-        messageElement.innerText += msg.text;
-      }
+      const messageText = document.createElement("span");
+      messageText.innerText = msg.text;
+      messageElement.appendChild(messageText);
 
       messageDisplay.appendChild(messageElement);
     });
+    // 自動滾動實現循環效果
+    if (limitedMessages.length === 8) {
+      const firstMessage = messageDisplay.firstChild;
+      if (firstMessage) {
+        messageDisplay.appendChild(firstMessage.cloneNode(true));
+        messageDisplay.removeChild(firstMessage);
+      }
+    }
   } catch (error) {
-    console.error("留言提交失敗：", error);
+    console.error("刷新留言失敗：", error);
   }
 }
-
