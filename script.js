@@ -69,6 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitMessageButton = document.getElementById("submitMessageButton");
   if (submitMessageButton) {
     submitMessageButton.addEventListener("click", submitMessage);
+  } else {
+    console.error("submitMessageButton 元素不存在，請檢查 HTML 結構！");
   }
 });
 
@@ -213,27 +215,26 @@ function updateUncheckedList() {
 // 提交留言
 async function submitMessage() {
   const messageInput = document.getElementById("messageInput").value.trim();
-  const imageInput = document.getElementById("imageInput").files[0];
-
-  // 確保 imageInput 存在
-  if (!imageInput) {
-    console.error("imageInput 元素不存在，請檢查 HTML 結構！");
-    return;
-  }
-
-  const imageFile = imageInput.files[0];
+  const imageInput = document.getElementById("imageInput");
+  const imageFile = imageInput?.files?.[0]; // 檢查是否有檔案
 
   if (!messageInput && !imageFile) {
-    console.error("留言或圖片未提供！");
+    alert("請提供文字或圖片！");
     return;
   }
 
   let imageUrl = null;
 
   if (imageFile) {
-    const storageRef = ref(storage, `messages/${Date.now()}_${imageFile.name}`);
-    await uploadBytes(storageRef, imageFile);
-    imageUrl = await getDownloadURL(storageRef);
+    try {
+      const storageRef = ref(storage, `messages/${Date.now()}_${imageFile.name}`);
+      await uploadBytes(storageRef, imageFile);
+      imageUrl = await getDownloadURL(storageRef);
+    } catch (error) {
+      console.error("圖片上傳失敗：", error);
+      alert("圖片上傳失敗，請稍後再試！");
+      return;
+    }
   }
 
   const message = {
@@ -251,8 +252,10 @@ async function submitMessage() {
     refreshMessages();
   } catch (error) {
     console.error("留言提交失敗：", error);
+    alert("留言提交失敗，請稍後再試！");
   }
 }
+
 // 刷新留言
 async function refreshMessages() {
   try {
