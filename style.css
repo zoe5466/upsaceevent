@@ -101,6 +101,10 @@ button:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 懸停效果 */
 }
 
+a {
+  text-decoration: none; /* 移除底部橫線 */
+}
+
 #lotteryInfo {
   padding: 10px;
   background: #f9f9f9;
