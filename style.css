@@ -18,39 +18,39 @@ a {
 
 /* 顯示留言的區域 */
 .message-display {
-  white-space: nowrap;
   width: 100%;
-  height: auto; /* 自適應留言內容的高度 */
-  max-height: 150px; /* 最大高度設置為150px，避免過大 */
-  overflow-x: hidden; /* 隱藏水平滾動條 */
-  overflow-y: hidden; /* 隱藏垂直滾動條 */
+  height: 50px; /* 固定高度 */
+  overflow: hidden; /* 隱藏溢出的內容 */
   position: relative;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  padding: 5px; /* 減少內部間距 */
-  box-sizing: border-box;
 }
 
+/* 留言容器 */
+.message-container {
+  display: flex;
+  gap: 20px;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  animation: none; /* 動態設置動畫 */
+}
+
+/* 單條留言樣式 */
 .message-item {
   display: inline-block;
-  padding: 5px 10px; /* 調整內部空間以適配手機 */
-  font-size: 1rem; /* 縮小字體 */
-  color: #333;
   background-color: #e67e22;
-  margin-right: 10px; /* 減少間距 */
+  color: white;
+  padding: 8px 12px;
   border-radius: 5px;
-  white-space: nowrap; /* 確保單條留言不會換行 */
-  animation: slide-left 10s linear infinite; /* 10秒一致滾動 */
-  animation-delay: calc(var(--index) * 2s); /* 每條留言有固定間隔 */
+  white-space: nowrap;
 }
 
-@keyframes slide-left {
+/* 跑馬燈動畫 */
+@keyframes marquee {
   0% {
-    transform: translateX(100%); /* 從右側進入 */
+    transform: translateX(100%);
   }
   100% {
-    transform: translateX(-100%); /* 滾動到左側 */
+    transform: translateX(-100%);
   }
 }
 
