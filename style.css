@@ -181,25 +181,32 @@ textarea {
   text-align: center;
 }
 
-#checkedInList, #uncheckedList {
-  list-style-type: none;
-  padding: 0;
-  margin: 10px 0;
-  text-align: center;
+/* 已報到與尚未報到人員名單分三欄 */
+.multi-column {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 三欄 */
   gap: 10px; /* 欄間距 */
+  list-style: none;
   padding: 0;
+  margin: 10px 0;
+  text-align: center;
 }
 
-#checkedInList li, #uncheckedList li {
-  padding: 8px;
-  background: #f9f9f9;
-  margin: 5px 0;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  text-align: center;
-  padding: 5px;
+.multi-column li {
+  padding: 10px; /* 加大內部間距 */
+  background: #f4f4f4; /* 改為更柔和的背景色 */
+  border-radius: 8px; /* 加大圓角 */
+  border: 1px solid #ccc; /* 修改邊框色 */
+  text-align: center; /* 確保文本置中 */
+  font-size: 14px; /* 調整字體大小 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加輕微陰影 */
+  transition: transform 0.2s ease, background-color 0.2s ease; /* 添加過渡效果 */
+}
+
+#multi-column li:hover {
+  background: #eaeaea; /* 懸停時背景色變化 */
+  transform: scale(1.05); /* 懸停時放大效果 */
+  cursor: pointer; /* 懸停時顯示手型 */
 }
 
 /* 手機適配 */
