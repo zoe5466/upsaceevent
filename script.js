@@ -201,7 +201,16 @@ function showMainContent(groupName, lotteryNumber, members) {
 // 更新已報到人員
 function updateCheckedInList() {
   const checkedInList = document.getElementById("checkedInList");
-  checkedInList.innerHTML = checkedIn.map((user) => `<li>${user.name}</li>`).join("");
+
+  // 清空列表
+  checkedInList.innerHTML = "";
+
+  // 使用 forEach 更新列表，顯示姓名與抽獎編號
+  checkedIn.forEach((user) => {
+    const listItem = document.createElement("li");
+    listItem.innerText = `${user.name} (抽獎編號: ${user.lotteryNumber})`;
+    checkedInList.appendChild(listItem);
+  });
 }
 
 // 更新未報到人員
