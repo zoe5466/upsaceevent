@@ -225,17 +225,18 @@ async function submitMessage() {
 
   let imageUrl = null;
 
-  if (imageFile) {
+if (imageFile) {
     try {
-      const storageRef = ref(storage, `messages/${Date.now()}_${imageFile.name}`);
-      await uploadBytes(storageRef, imageFile);
-      imageUrl = await getDownloadURL(storageRef);
+        const storageRef = ref(storage, `messages/${Date.now()}_${imageFile.name}`);
+        const metadata = { contentType: imageFile.type }; // 確保正確的 MIME 類型
+        await uploadBytes(storageRef, imageFile, metadata); // 上傳圖片
+        imageUrl = await getDownloadURL(storageRef); // 獲取圖片 URL
     } catch (error) {
-      console.error("圖片上傳失敗：", error);
-      alert("圖片上傳失敗，請稍後再試！");
-      return;
+        console.error("圖片上傳失敗：", error);
+        alert("圖片上傳失敗，請檢查圖片大小或網路連線！");
+        return;
     }
-  }
+}
 
   const message = {
     text: messageInput,
@@ -244,16 +245,24 @@ async function submitMessage() {
     timestamp: new Date().toISOString(),
   };
 
-  try {
+try {
     await updateDoc(doc(db, "event-data", "data"), {
-      messages: arrayUnion(message),
+        messages: arrayUnion(message),
     });
     console.log("留言提交成功！");
+
+    // 清空輸入框和圖片選擇器
+    document.getElementById("messageInput").value = "";
+    document.getElementById("imageInput").value = null;
+
+    // 顯示成功提示
+    alert("留言成功！");
     refreshMessages();
-  } catch (error) {
+} catch (error) {
     console.error("留言提交失敗：", error);
     alert("留言提交失敗，請稍後再試！");
-  }
+}
+
 }
 
 // 刷新留言
