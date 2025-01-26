@@ -34,10 +34,10 @@ a {
 .message-container {
   display: flex; /* 保持水平排列 */
   flex-direction: row;
+  align-items: center; /* 確保留言項目垂直居中 */
   position: absolute; /* 確保動畫不影響外部結構 */
-  top: 50%; /* 垂直居中 */
+  gap: 10px; /* 留言之間的間距 */
   left: 0;
-  transform: translateY(-50%); /* 居中調整 */
   animation: marquee 10s linear infinite; /* 跑馬燈效果 */
   white-space: nowrap; /* 防止換行 */
 }
