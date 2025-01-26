@@ -17,21 +17,25 @@ a {
 }
 
 .message-display {
-  max-height: 80px; /* 適合手機屏幕的高度 */
-  padding: 10px;
-  overflow: hidden;
+  width: 100%; /* 使用父容器的寬度 */
+  max-width: 360px; /* 固定最大寬度，防止過寬 */
+  height: 80px; /* 固定高度，適配手機屏幕 */
+  overflow: hidden; /* 隱藏多餘內容 */
   position: relative;
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #f9f9f9;
+  box-sizing: border-box; /* 包括邊框和內距 */
 }
 
 .message-container {
-  display: flex;
-  flex-direction: row; /* 保持水平排列 */
-  position: relative; /* 防止絕對定位影響布局 */
-  gap: 15px; /* 留言之間的間距 */
-  animation: marquee 12s linear infinite; /* 適當調整動畫時間 */
+  display: flex; /* 保持水平排列 */
+  flex-direction: row;
+  position: absolute; /* 確保動畫不影響外部結構 */
+  top: 50%; /* 垂直居中 */
+  left: 0;
+  transform: translateY(-50%); /* 居中調整 */
+  animation: marquee 10s linear infinite; /* 跑馬燈效果 */
   white-space: nowrap; /* 防止換行 */
 }
   
@@ -241,6 +245,7 @@ textarea {
   }
 
   .message-display {
+    max-width: 280px; /* 減少寬度以適應窄屏幕 */
     max-height: 100px; /* 適合手機的高度 */
     padding: 10px;
   }
