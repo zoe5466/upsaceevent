@@ -295,7 +295,7 @@ async function refreshMessages() {
     messageContainer.classList.add("message-container");
 
     // 保持最多顯示 8 條留言
-    const limitedMessages = messages.slice(-8); // 取最後 8 條
+    const limitedMessages = messages.slice(-10); // 取最後 10 條
 
     // 生成留言內容
     limitedMessages.forEach((msg) => {
