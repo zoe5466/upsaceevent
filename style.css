@@ -17,9 +17,9 @@ a {
 }
 
 .message-display {
-  max-height: 50px; /* 設定固定高度 */
+  max-height: 80px; /* 適合手機屏幕的高度 */
   padding: 10px;
-  overflow: hidden; /* 隱藏超出部分 */
+  overflow: hidden;
   position: relative;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -27,21 +27,21 @@ a {
 }
 
 .message-container {
-  display: flex; /* 水平排列 */
-  flex-direction: row; /* 確保留言在同一行 */
-  gap: 20px; /* 控制每條留言之間的距離 */
-  position: absolute;
-  animation: marquee 10s linear infinite; /* 添加跑馬燈動畫 */
-  white-space: nowrap; /* 確保內容不換行 */
+  display: flex;
+  flex-direction: row; /* 保持水平排列 */
+  position: relative; /* 防止絕對定位影響布局 */
+  gap: 15px; /* 留言之間的間距 */
+  animation: marquee 12s linear infinite; /* 適當調整動畫時間 */
+  white-space: nowrap; /* 防止換行 */
 }
-
+  
 .message-item {
   display: inline-block;
-  padding: 5px 10px;
+  padding: 8px 12px; /* 增加內距 */
   background-color: #e67e22;
   color: white;
   border-radius: 5px;
-  font-size: 0.85rem;
+  font-size: 1rem; /* 提高字體大小，改善閱讀性 */
   white-space: nowrap; /* 確保單條留言不換行 */
 }
 
@@ -240,30 +240,18 @@ textarea {
     margin-bottom: 20px;
   }
 
-.message-display {
-  max-height: 120px; /* 增加高度，讓留言框更寬敞 */
-  padding: 15px; /* 增加內距，讓內容更居中 */
-  overflow: hidden; /* 隱藏超出部分 */
-  position: relative;
-  border: 1px solid #ccc; /* 添加邊框，使區域更明顯 */
-  border-radius: 10px; /* 圓角邊框美化 */
-  background-color: #f9f9f9; /* 背景色保持柔和 */
-}
+  .message-display {
+    max-height: 100px; /* 適合手機的高度 */
+    padding: 10px;
+  }
 
-.message-container {
-  display: flex;
-  flex-direction: row; /* 確保留言在同一行 */
-  gap: 10px; /* 留言之間的間距 */
-  position: absolute;
-  animation: marquee 10s linear infinite; /* 添加跑馬燈動畫 */
-  white-space: nowrap; /* 確保內容不換行 */
-}
-.message-item {
-  font-size: 0.85rem; /* 稍微增加字體大小 */
-  padding: 6px 12px; /* 增加內距 */
-  border: 1px solid #ddd; /* 為留言項目添加邊框 */
-  border-radius: 5px; /* 美化邊框 */
-  background-color: #fff; /* 留言背景色設為白色 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加輕微陰影 */
-}
+  .message-container {
+    gap: 10px; /* 縮小間距，節省空間 */
+    animation-duration: 15s; /* 增加動畫時間，適應小屏內容 */
+  }
+
+  .message-item {
+    font-size: 0.9rem; /* 在手機上縮小字體 */
+    padding: 6px 10px;
+  }
 }
