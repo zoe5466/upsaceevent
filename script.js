@@ -122,22 +122,21 @@ async function checkIn() {
   if (existingUser) {
     const group = groups.find((g) => g.name === existingUser.group);
     showMainContent(existingUser.group, existingUser.lotteryNumber, group.members);
-    
-    // 設置當前用戶為已報到用戶
-    currentUser = { name: existingUser.name };   
 
-    // **新增刷新留言功能**
-    await refreshMessages();
+    currentUser = { name: existingUser.name };
+
+    console.log("報到完成 - 已報到用戶，刷新留言區。");
+    await refreshMessages(); // 確保刷新留言
     return;
   }
 
-  // 未報到用戶執行分配組別邏輯
+  console.log("報到完成 - 新用戶，開始分配組別。");
   await assignGroup(nameInput);
-  // 設置當前用戶為新報到用戶
+
   currentUser = { name: nameInput };
 
-    // **新增刷新留言功能**
-  await refreshMessages();
+  console.log("報到完成 - 新用戶，刷新留言區。");
+  await refreshMessages(); // 確保刷新留言
 }
 
 /// 分配組別
@@ -164,12 +163,13 @@ try {
     [`groups.${randomGroup.name}.count`]: randomGroup.count,
     checkedIn: arrayUnion(newUser)
   });
+  
   console.log("資料更新成功！");
   checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
   showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
  
-    // **新增刷新留言功能**
-    await refreshMessages();
+    console.log("分配組別完成 - Firebase 資料已更新，刷新留言區。");
+    await refreshMessages(); // 確保刷新留言
   } catch (error) {
     console.error("資料更新錯誤：", error);
     checkInMessage.innerText = "資料更新失敗，請稍後重試。";
