@@ -16,24 +16,28 @@ a {
   text-decoration: none; /* 移除底部橫線 */
 }
 
-/* 留言框樣式 */
+/* 留言框樣式調整 */
 .message-display {
   width: 100%;
-  height: 50px; /* 固定高度 */
-  overflow: hidden; /* 隱藏溢出的內容 */
+  max-height: 60px; /* 手機上設定更小的高度 */
+  overflow: hidden;
   position: relative;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 10px;
+  box-sizing: border-box; /* 確保內外間距不影響尺寸 */
+  display: flex;
+  align-items: center; /* 確保內容垂直置中 */
 }
 
 /* 留言容器 */
 .message-container {
   display: flex;
-  gap: 20px; /* 留言間距 */
+  gap: 10px; /* 動態調整間距 */
   position: absolute;
-  animation: marquee 10s linear infinite; /* 跑馬燈動畫 */
+  animation: marquee 15s linear infinite; /* 減慢跑馬燈速度 */
   white-space: nowrap;
+  will-change: transform; /* 優化動畫性能 */
 }
 
 /* 單條留言樣式 */
@@ -41,9 +45,10 @@ a {
   display: inline-block;
   background-color: #e67e22;
   color: white;
-  padding: 8px 12px;
+  padding: 6px 10px; /* 調整內距 */
   border-radius: 5px;
   white-space: nowrap;
+  font-size: 0.85rem; /* 在手機上縮小字體 */
 }
 
 /* 跑馬燈動畫 */
@@ -241,13 +246,17 @@ textarea {
     margin-bottom: 20px;
   }
 
-    .message-display {
-    max-height: 100px; /* 手機上高度更小 */
-    padding: 3px; /* 減少內間距 */
+  .message-display {
+    max-height: 50px; /* 減少高度 */
+    padding: 5px;
+  }
+
+  .message-container {
+    gap: 5px; /* 減小間距 */
   }
 
   .message-item {
-    font-size: 0.9rem; /* 手機上文字更小 */
-    margin-right: 5px; /* 減少留言間距 */
+    font-size: 0.75rem; /* 再次縮小字體 */
+    padding: 4px 8px; /* 減小內間距 */
   }
 }
