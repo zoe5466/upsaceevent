@@ -27,6 +27,8 @@ a {
   border-radius: 10px;
   background-color: #f9f9f9;
   box-sizing: border-box; /* 包括邊框和內距 */
+  display: flex; /* 使用 Flexbox */
+  align-items: center; /* 垂直居中內容 */
 }
 
 .message-container {
@@ -42,13 +44,14 @@ a {
   
 .message-item {
   display: inline-block;
-  padding: 8px 12px; /* 增加內距 */
+  padding: 6px 12px;
   background-color: #e67e22;
   color: white;
   border-radius: 5px;
   font-size: 1rem; /* 提高字體大小，改善閱讀性 */
   white-space: nowrap; /* 確保單條留言不換行 */
   margin-right: 10px; /* 留言間距 */
+  line-height: 1; /* 確保文字垂直居中 */
 }
 
 /* 跑馬燈動畫 */
