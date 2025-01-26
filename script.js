@@ -316,10 +316,10 @@ async function refreshMessages() {
     // 插入留言容器到展示區
     messageDisplay.appendChild(messageContainer);
 
-    // 動態計算滾動動畫時間
+    // **改動：設置動畫時間，限制最小和最大值**
     const totalWidth = messageContainer.scrollWidth;
     if (totalWidth > 0) {
-      const duration = totalWidth / 50; // 控制滾動速度（50px/s）
+      const duration = Math.min(Math.max(totalWidth / 50, 10), 30); // **最小10s，最大30s**
       messageContainer.style.animationDuration = `${duration}s`;
     } else {
       console.warn("留言容器寬度為 0，無法設置動畫時間！");
