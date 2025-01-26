@@ -16,39 +16,33 @@ a {
   text-decoration: none; /* 移除底部橫線 */
 }
 
-/* 留言框樣式調整 */
 .message-display {
-  width: 100%;
-  max-height: 60px; /* 手機上設定更小的高度 */
-  overflow: hidden;
+  max-height: 50px; /* 設定固定高度 */
+  padding: 10px;
+  overflow: hidden; /* 隱藏超出部分 */
   position: relative;
-  background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 10px;
-  box-sizing: border-box; /* 確保內外間距不影響尺寸 */
-  display: flex;
-  align-items: center; /* 確保內容垂直置中 */
+  background-color: #f9f9f9;
 }
 
-/* 留言容器 */
 .message-container {
-  display: flex;
-  gap: 10px; /* 動態調整間距 */
+  display: flex; /* 水平排列 */
+  flex-direction: row; /* 確保留言在同一行 */
+  gap: 20px; /* 控制每條留言之間的距離 */
   position: absolute;
-  animation: marquee 15s linear infinite; /* 減慢跑馬燈速度 */
-  white-space: nowrap;
-  will-change: transform; /* 優化動畫性能 */
+  animation: marquee 10s linear infinite; /* 添加跑馬燈動畫 */
+  white-space: nowrap; /* 確保內容不換行 */
 }
 
-/* 單條留言樣式 */
 .message-item {
   display: inline-block;
+  padding: 5px 10px;
   background-color: #e67e22;
   color: white;
-  padding: 6px 10px; /* 調整內距 */
   border-radius: 5px;
-  white-space: nowrap;
-  font-size: 0.85rem; /* 在手機上縮小字體 */
+  font-size: 0.85rem;
+  white-space: nowrap; /* 確保單條留言不換行 */
 }
 
 /* 跑馬燈動畫 */
@@ -249,7 +243,8 @@ textarea {
 .message-display {
   max-height: 120px; /* 增加高度，讓留言框更寬敞 */
   padding: 15px; /* 增加內距，讓內容更居中 */
-  overflow-y: auto; /* 啟用垂直滾動條，防止內容溢出 */
+  overflow: hidden; /* 隱藏超出部分 */
+  position: relative;
   border: 1px solid #ccc; /* 添加邊框，使區域更明顯 */
   border-radius: 10px; /* 圓角邊框美化 */
   background-color: #f9f9f9; /* 背景色保持柔和 */
@@ -257,8 +252,11 @@ textarea {
 
 .message-container {
   display: flex;
-  flex-direction: column; /* 讓留言垂直排列 */
+  flex-direction: row; /* 確保留言在同一行 */
   gap: 10px; /* 留言之間的間距 */
+  position: absolute;
+  animation: marquee 10s linear infinite; /* 添加跑馬燈動畫 */
+  white-space: nowrap; /* 確保內容不換行 */
 }
 .message-item {
   font-size: 0.85rem; /* 稍微增加字體大小 */
