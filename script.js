@@ -125,6 +125,9 @@ async function checkIn() {
     
     // 設置當前用戶為已報到用戶
     currentUser = { name: existingUser.name };   
+
+    // **新增刷新留言功能**
+    await refreshMessages();
     return;
   }
 
@@ -132,6 +135,9 @@ async function checkIn() {
   await assignGroup(nameInput);
   // 設置當前用戶為新報到用戶
   currentUser = { name: nameInput };
+
+    // **新增刷新留言功能**
+  await refreshMessages();
 }
 
 /// 分配組別
@@ -161,9 +167,12 @@ try {
   console.log("資料更新成功！");
   checkInMessage.innerText = `報到成功！您的組別為：${randomGroup.name}`;
   showMainContent(randomGroup.name, lotteryNumber, randomGroup.members);
-} catch (error) {
-  console.error("資料更新錯誤：", error);
-  checkInMessage.innerText = "資料更新失敗，請稍後重試。";
+ 
+    // **新增刷新留言功能**
+    await refreshMessages();
+  } catch (error) {
+    console.error("資料更新錯誤：", error);
+    checkInMessage.innerText = "資料更新失敗，請稍後重試。";
   }
 }
 
@@ -288,13 +297,23 @@ async function refreshMessages() {
     const messages = data?.messages || [];
 
     const messageDisplay = document.getElementById("messageDisplay");
+
+    if (!messageDisplay) {
+      console.error("留言展示區未找到！");
+      return;
+    }
+    
+    // 清空舊內容
+    messageDisplay.innerHTML = "";
+
+    // 動態生成留言容器
     const messageContainer = document.createElement("div");
     messageContainer.classList.add("message-container");
 
     // 保持最多顯示 8 條留言
     const limitedMessages = messages.slice(-8); // 取最後 8 條
 
-    // 動態生成留言元素
+    // 生成留言內容
     limitedMessages.forEach((msg) => {
       const messageElement = document.createElement("div");
       messageElement.classList.add("message-item");
@@ -309,15 +328,14 @@ async function refreshMessages() {
 
       messageContainer.appendChild(messageElement);
     });
-    
-    // 清空舊內容，添加新的留言容器
-    messageDisplay.innerHTML = "";
+
+    // 插入留言容器到展示區
     messageDisplay.appendChild(messageContainer);
 
-    // 確保跑馬燈效果（CSS 控制）
+    // 動態計算滾動動畫時間
     const totalWidth = messageContainer.scrollWidth;
-    const duration = totalWidth / 50; // 控制滾動速度，50px/s
-    messageContainer.style.animation = `marquee ${duration}s linear infinite`;
+    const duration = totalWidth / 50; // 控制滾動速度（50px/s）
+    messageContainer.style.animationDuration = `${duration}s`;
   } catch (error) {
     console.error("刷新留言失敗：", error);
   }
