@@ -246,17 +246,26 @@ textarea {
     margin-bottom: 20px;
   }
 
-  .message-display {
-    max-height: 50px; /* 減少高度 */
-    padding: 5px;
-  }
+.message-display {
+  max-height: 120px; /* 增加高度，讓留言框更寬敞 */
+  padding: 15px; /* 增加內距，讓內容更居中 */
+  overflow-y: auto; /* 啟用垂直滾動條，防止內容溢出 */
+  border: 1px solid #ccc; /* 添加邊框，使區域更明顯 */
+  border-radius: 10px; /* 圓角邊框美化 */
+  background-color: #f9f9f9; /* 背景色保持柔和 */
+}
 
-  .message-container {
-    gap: 5px; /* 減小間距 */
-  }
-
-  .message-item {
-    font-size: 0.75rem; /* 再次縮小字體 */
-    padding: 4px 8px; /* 減小內間距 */
-  }
+.message-container {
+  display: flex;
+  flex-direction: column; /* 讓留言垂直排列 */
+  gap: 10px; /* 留言之間的間距 */
+}
+.message-item {
+  font-size: 0.85rem; /* 稍微增加字體大小 */
+  padding: 6px 12px; /* 增加內距 */
+  border: 1px solid #ddd; /* 為留言項目添加邊框 */
+  border-radius: 5px; /* 美化邊框 */
+  background-color: #fff; /* 留言背景色設為白色 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加輕微陰影 */
+}
 }
