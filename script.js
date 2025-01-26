@@ -296,13 +296,15 @@ async function refreshMessages() {
     const data = snapshot.data();
     const messages = data?.messages || [];
 
+    console.log("刷新留言 - 獲取到的留言資料:", messages);
+
     const messageDisplay = document.getElementById("messageDisplay");
 
     if (!messageDisplay) {
       console.error("留言展示區未找到！");
       return;
     }
-    
+ 
     // 清空舊內容
     messageDisplay.innerHTML = "";
 
@@ -334,8 +336,12 @@ async function refreshMessages() {
 
     // 動態計算滾動動畫時間
     const totalWidth = messageContainer.scrollWidth;
-    const duration = totalWidth / 50; // 控制滾動速度（50px/s）
-    messageContainer.style.animationDuration = `${duration}s`;
+    if (totalWidth > 0) {
+      const duration = totalWidth / 50; // 控制滾動速度（50px/s）
+      messageContainer.style.animationDuration = `${duration}s`;
+    } else {
+      console.warn("留言容器寬度為 0，無法設置動畫時間！");
+    }
   } catch (error) {
     console.error("刷新留言失敗：", error);
   }
