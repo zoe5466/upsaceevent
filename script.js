@@ -238,35 +238,19 @@ function updateUncheckedList() {
 // 提交留言
 async function submitMessage() {
   const messageInput = document.getElementById("messageInput").value.trim();
-  const imageInput = document.getElementById("imageInput");
-  const imageFile = imageInput?.files?.[0]; // 檢查是否有檔案
 
-  if (!messageInput && !imageFile) {
-    alert("請提供文字或圖片！");
-    return;
-  }
+if (!messageInput) {
+  alert("請提供文字！");
+  return;
+}
 
   let imageUrl = null;
 
-if (imageFile) {
-    try {
-        const storageRef = ref(storage, `messages/${Date.now()}_${imageFile.name}`);
-        const metadata = { contentType: imageFile.type }; // 確保正確的 MIME 類型
-        await uploadBytes(storageRef, imageFile, metadata); // 上傳圖片
-        imageUrl = await getDownloadURL(storageRef); // 獲取圖片 URL
-    } catch (error) {
-        console.error("圖片上傳失敗：", error);
-        alert("圖片上傳失敗，請檢查圖片大小或網路連線！");
-        return;
-    }
-}
-
-  const message = {
-    text: messageInput,
-    image: imageUrl,
-    user: currentUser?.name || "Anonymous",
-    timestamp: new Date().toISOString(),
-  };
+const message = {
+  text: messageInput,
+  user: currentUser?.name || "Anonymous",
+  timestamp: new Date().toISOString(),
+};
 
   try {
     // 更新留言資料到 Firebase
@@ -275,18 +259,16 @@ if (imageFile) {
     });
     console.log("留言提交成功！");
 
-    // 清空輸入框和圖片選擇器
+    // 清空輸入框
     document.getElementById("messageInput").value = "";
-    document.getElementById("imageInput").value = null;
-
+    
     // 顯示成功提示
     alert("留言成功！");
     refreshMessages();
-} catch (error) {
+  } catch (error) {
     console.error("留言提交失敗：", error);
     alert("留言提交失敗，請稍後再試！");
-}
-
+  }
 }
 
 // 刷新留言
