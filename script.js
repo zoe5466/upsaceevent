@@ -276,7 +276,7 @@ async function refreshMessages() {
   try {
     const snapshot = await getDoc(doc(db, "event-data", "data"));
     const data = snapshot.data();
-    const messages = data?.messages || [];
+    const messages = Array.isArray(data?.messages) ? data.messages : [];
 
     console.log("刷新留言 - 獲取到的留言資料:", messages);
 
@@ -288,7 +288,10 @@ async function refreshMessages() {
     }
  
     // 清空舊內容
-    messageDisplay.innerHTML = "";
+    while (messageDisplay.firstChild) {
+  messageDisplay.removeChild(messageDisplay.firstChild);
+}
+
 
     // 動態生成留言容器
     const messageContainer = document.createElement("div");
@@ -313,17 +316,22 @@ async function refreshMessages() {
       messageContainer.appendChild(messageElement);
     });
 
-    // 插入留言容器到展示區
-    messageDisplay.appendChild(messageContainer);
+   console.time("清空與插入留言");
+   messageDisplay.appendChild(messageContainer);
+   console.timeEnd("清空與插入留言");
 
+    console.time("設置動畫");
     // **改動：設置動畫時間，限制最小和最大值**
-    const totalWidth = messageContainer.scrollWidth;
-    if (totalWidth > 0) {
-      const duration = Math.min(Math.max(totalWidth / 50, 10), 60); // **最小10s，最大30s**
-      messageContainer.style.animationDuration = `${duration}s`;
-    } else {
-      console.warn("留言容器寬度為 0，無法設置動畫時間！");
-    }
+    requestAnimationFrame(() => {
+  const totalWidth = messageContainer.scrollWidth;
+  if (totalWidth > 0) {
+    const duration = Math.min(Math.max(totalWidth / 50, 10), 60);
+    messageContainer.style.animationDuration = `${duration}s`;
+  } else {
+    console.warn("留言容器寬度為 0，無法設置動畫時間！");
+  }
+});
+    console.timeEnd("設置動畫");
   } catch (error) {
     console.error("刷新留言失敗：", error);
   }
